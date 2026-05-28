@@ -1,46 +1,11 @@
-import axios from "axios";
-
-const BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  (typeof window !== "undefined" &&
-   (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-    ? "http://localhost:8000"
-    : "");
-
-const api = axios.create({
-  baseURL: `${BASE_URL}/api/v1`,
-  headers: { "Content-Type": "application/json" },
-  timeout: 30000,
+// This file is not needed as we are making API calls directly in the App component
+// However, you can create a separate API file if you want to keep your API calls organized
+export const api = axios.create({
+  baseURL: BASE_URL,
 });
 
-api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    console.error("API error:", err.response?.status, err.config?.url);
-    if (err.response?.status === 401) localStorage.removeItem("via_token");
-    return Promise.reject(err);
-  }
-);
-
-export const login    = (u, p) => api.post("/auth/login",    { username: u, password: p });
-export const register = (data)  => api.post("/auth/register", data);
-export const setAuthToken = (token) => {
-  if (token) {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    localStorage.setItem("via_token", token);
-  } else {
-    delete api.defaults.headers.common["Authorization"];
-    localStorage.removeItem("via_token");
-  }
-};
-const saved = localStorage.getItem("via_token");
-if (saved) setAuthToken(saved);
-
-export const getItems   = (params = {}) => api.get("/items",        { params });
-export const getItem    = (id)            => api.get(`/items/${id}`);
-export const createItem = (data)          => api.post("/items",       data);
-export const updateItem = (id, data)      => api.put(`/items/${id}`, data);
-export const deleteItem = (id)            => api.delete(`/items/${id}`);
-export const getStats   = ()              => api.get("/stats");
-
-export default api;
+// Auto-generated missing exports by VIA
+export const createItem = async (d) => { const r = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/v1/items`, {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)}); if (!r.ok) throw new Error("createItem failed"); return r.json(); };
+export const deleteItem = async (id) => { const r = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/v1/items/${id}`, {method:"DELETE"}); if (!r.ok) throw new Error("deleteItem failed"); return r.json(); };
+export const getItems = async (p) => { const q = p ? "?" + new URLSearchParams(p) : ""; const r = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/v1/items${q}`); if (!r.ok) throw new Error("getItems failed"); return r.json(); };
+export const getStats = async () => { const r = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/v1/stats`); if (!r.ok) throw new Error("getStats failed"); return r.json(); };
