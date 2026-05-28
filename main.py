@@ -32,8 +32,7 @@ def on_startup():
 
 @app.get("/")
 def root():
-    from fastapi.responses import RedirectResponse
-    return RedirectResponse(url="/docs")
+    return {"app": "Create A Simple Full Stack Notes", "status": "running", "docs": "/docs", "api": "/api/v1/items"}
 
 @app.get("/health")
 def health():
